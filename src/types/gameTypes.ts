@@ -6,9 +6,13 @@ export type Player = {
   knownCardPositions: boolean[];
   playersTurn: boolean;
   cardCache: Card | null;
+  tookDispiledCard: boolean;
+  roundPoints: number;
+  totalPoints: number;
+  closedRound: boolean;
 };
 
-type CardValue =
+export type CardValue =
   | -2
   | -1
   | 0
@@ -25,19 +29,11 @@ type CardValue =
   | 11
   | 12
   | "X";
-type CardColor =
-  | "darkblue"
-  | "lightblue"
-  | "green"
-  | "yellow"
-  | "red"
-  | "black";
 
 export type Card = {
   id: number;
   name: string;
   value: CardValue;
-  color: CardColor;
 };
 
 export type CardStack = {

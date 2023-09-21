@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { socket } from "./socket";
+import ThreeScene from "./components/ThreeScene";
 import { ConnectionState } from "./components/ConnectionState";
 import { ConnectionManager } from "./components/ConnectionManager";
 import { JoinSession } from "./components/JoinSession";
 import { Events } from "./components/Events";
 import { Game } from "./types/gameTypes";
 import Action from "./components/Action";
+import CardStack from "./components/CardStack";
+import DepositCards from "./components/DepositCards";
+import CardCache from "./components/CardCache";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -16,11 +20,7 @@ export default function App() {
   const [messageDispaly, setMessageDisplay] = useState<string>("");
 
   const showStartGameButton = session !== "" && clientsInRoom >= 2;
-
-  const remainingInCardStack = gameData?.cardStack?.cards?.length || 0;
-  const remainingInDiscardPile = gameData?.discardPile?.length || 0;
-  const topCardInDiscardPile =
-    gameData?.discardPile?.[remainingInDiscardPile - 1];
+  const showNextGameButton = gameData?.phase === "new round";
 
   const playersData = extractMyData(gameData);
 
@@ -28,19 +28,13 @@ export default function App() {
     socket.emit("new-game", { sessionId: session });
   }
 
+  function nextGame() {
+    socket.emit("next-round", { sessionId: session });
+  }
+
   function clickCard(cardPosition: number) {
     console.log("Clicked card", cardPosition);
     socket.emit("click-card", cardPosition);
-  }
-
-  function drawFromCardStack() {
-    console.log("Draw card");
-    socket.emit("draw-from-card-stack", { sessionId: session });
-  }
-
-  function clickDiscardPile() {
-    console.log("Clicked discard pile");
-    socket.emit("click-discard-pile", { sessionId: session });
   }
 
   function extractMyData(gameData: Game | null) {
@@ -78,8 +72,9 @@ export default function App() {
       setClientsInRoom(clients);
     }
 
-    function onMessageEvent(value: string) {
-      setMessageEvents((previous) => [...previous, value]);
+    function onMessageEvent(message: string) {
+      setTempMessage(message);
+      setMessageEvents((previous) => [...previous, message]);
     }
 
     function onGameUpdate(gameData: Game) {
@@ -103,20 +98,23 @@ export default function App() {
 
   return (
     <div className="App">
+      <ThreeScene gameData={gameData} />
       <ConnectionState
         isConnected={isConnected}
         session={session}
         clientsInRoom={clientsInRoom}
       />
-      <Events events={messageEvents} />
       <ConnectionManager />
       <JoinSession session={session} setSession={setSession} />
       {showStartGameButton && <button onClick={startGame}>Start Game</button>}
+      {showNextGameButton && <button onClick={nextGame}>Next Game</button>}
       {gameData &&
         gameData.players.map((playerData, index) => (
           <div key={index}>
             <p>Player ID: {playerData.id}</p>
             <p>Player Name: {playerData.name}</p>
+            <p>Player Round Points: {playerData.roundPoints}</p>
+            <p>Player Total Points: {playerData.totalPoints}</p>
             <table>
               <thead>
                 <tr>
@@ -155,35 +153,18 @@ export default function App() {
                   ))}
               </tbody>
             </table>
+            <br />
+            <CardStack gameData={gameData} playerData={playerData} />
+            <DepositCards gameData={gameData} playerData={playerData} />
+            <CardCache playersData={playersData} />
+            <br />
           </div>
         ))}
       <br />
-      {gameData?.cardStack && remainingInCardStack > 0 && (
-        <div>
-          <Action data={playersData} action={drawFromCardStack}>
-            Draw
-          </Action>
-          <span style={{ color: "grey", marginLeft: "5px" }}>
-            {remainingInCardStack} in Card Set
-          </span>
-        </div>
-      )}
-      {gameData?.discardPile && remainingInDiscardPile > 0 && (
-        <div>
-          <Action data={playersData} action={clickDiscardPile}>
-            {topCardInDiscardPile?.value}
-          </Action>
-          <span style={{ color: "grey", marginLeft: "5px" }}>
-            {remainingInDiscardPile} Discard Pile
-          </span>
-        </div>
-      )}
-      {playersData?.cardCache && (
-        <div>
-          <p>Card Cache: {playersData.cardCache.value}</p>
-        </div>
-      )}
+      <br />
+
       {messageDispaly && messageDispaly !== "" && <p>{messageDispaly}</p>}
+      <Events events={messageEvents} />
     </div>
   );
 }
