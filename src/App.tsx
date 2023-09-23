@@ -5,7 +5,6 @@ import GameCanvas from "./components/GameCanvas";
 import { Footer } from "./components/Footer";
 import { JoinSession } from "./components/JoinSession";
 import { Game } from "./types/gameTypes";
-import { extractCurrentPlayer } from "./helpers";
 import MessageDisplay from "./components/MessageDisplay";
 
 export default function App() {
@@ -18,8 +17,6 @@ export default function App() {
 
   const showStartGameButton = session !== "" && clientsInRoom >= 2;
   const showNextGameButton = gameData?.phase === "new round";
-
-  const currentPlayerData = extractCurrentPlayer(gameData);
 
   function setTempMessage(message: string) {
     setMessageDisplay(message);
@@ -82,7 +79,7 @@ export default function App() {
           isConnected={isConnected}
           session={session}
           clientsInRoom={clientsInRoom}
-          currentPlayerData={currentPlayerData}
+          playerData={gameData?.players ?? []}
           showNextGameButton={showNextGameButton}
         />
       )}

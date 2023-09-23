@@ -1,11 +1,15 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, HTMLProps } from "react";
 
-type TextNormalProps = {
+type TextNormalProps = HTMLProps<HTMLParagraphElement> & {
   children: ReactNode;
 };
 
-const Text: FC<TextNormalProps> = ({ children }) => {
-  return <p className="mb-2 text-sm font-medium text-white">{children}</p>;
+const Text: FC<TextNormalProps> = ({ children, ...rest }) => {
+  return (
+    <p className="text-sm font-medium text-white" {...rest}>
+      {children}
+    </p>
+  );
 };
 
 export default Text;
