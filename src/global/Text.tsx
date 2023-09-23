@@ -5,7 +5,7 @@ type TextNormalProps = {
 };
 
 const Text: FC<TextNormalProps> = ({ children }) => {
-  return <p className="text-white">{children}</p>;
+  return <p className="mb-2 text-sm font-medium text-white">{children}</p>;
 };
 
 export default Text;

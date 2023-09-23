@@ -21,7 +21,7 @@ const PlayerCards: FC<PlayerCardsProps> = ({ playersData }) => {
     const currentPlayerWithCards: PlayerWithVisualCards[] = [];
     let nonCurrentPlayerIndex = 1;
     playersData.forEach((player) => {
-      const positionOffset = 12;
+      const positionOffset = 14;
       const playerWithCards: PlayerWithVisualCards = {
         player,
         cards: [],
@@ -68,7 +68,7 @@ const PlayerCards: FC<PlayerCardsProps> = ({ playersData }) => {
           <CardCache
             playerData={playerWithCards.player}
             // current player is always at index 0
-            position={new Vector3(9, 20, 4 - playerIndex * 12)}
+            position={new Vector3(9, 20, 6 - playerIndex * 12)}
           />
         </>
       ))}
