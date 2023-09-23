@@ -22,7 +22,7 @@ const DiscardPileCard: FC<DiscardPileCardProps> = ({
   const clickCard = () => {
     if (!isUppermostCard) return;
     console.log("Draw card");
-    socket.emit("draw-from-card-stack", "draw card");
+    socket.emit("click-discard-pile", "take discard pile card");
   };
   return <primitive object={cardObject} onClick={() => clickCard()} />;
 };
