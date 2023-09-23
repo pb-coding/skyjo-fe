@@ -22,7 +22,7 @@ export default function App() {
     setMessageDisplay(message);
     setTimeout(() => {
       setMessageDisplay("");
-    }, 3000);
+    }, 800);
   }
 
   useEffect(() => {
@@ -39,7 +39,12 @@ export default function App() {
     }
 
     function onMessageEvent(message: string) {
-      setTempMessage(message);
+      if (
+        message.includes(" won ") ||
+        message.includes(" equally ") ||
+        message.includes(" doubled ")
+      )
+        setTempMessage(message);
       // setMessageEvents((previous) => [...previous, message]);
     }
 
@@ -61,6 +66,8 @@ export default function App() {
       socket.off("game-update", onGameUpdate);
     };
   }, []);
+
+  console.log(messageDispaly);
 
   return (
     <div className="bg-gray-900 w-screen h-screen">
