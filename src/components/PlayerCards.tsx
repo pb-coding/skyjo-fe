@@ -5,6 +5,7 @@ import { Vector3 } from "three";
 import { createPlayerCards } from "../objects/cards";
 import PlayerCard from "./PlayerCard";
 import { PlayerWithVisualCards, Player } from "../types/gameTypes";
+import CardCache from "./CardCache";
 
 type PlayerCardsProps = {
   playersData: Player[];
@@ -64,6 +65,11 @@ const PlayerCards: FC<PlayerCardsProps> = ({ playersData }) => {
               isCurrentPlayer={playerIndex === 0}
             />
           ))}
+          <CardCache
+            playerData={playerWithCards.player}
+            // current player is always at index 0
+            position={new Vector3(9, 20, 4 - playerIndex * 12)}
+          />
         </>
       ))}
     </>
@@ -71,3 +77,5 @@ const PlayerCards: FC<PlayerCardsProps> = ({ playersData }) => {
 };
 
 export default PlayerCards;
+// ich (0) --> 4
+// andere (1) --> -8

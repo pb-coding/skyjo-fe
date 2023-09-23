@@ -1,15 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { Vector3, Object3D } from "three";
-import { socket } from "../socket";
 
 import { createCard } from "../objects/cards";
 import { Player } from "../types/gameTypes";
 
 type CardCacheProps = {
-  playersData: Player[];
+  playerData: Player;
+  position: Vector3;
 };
 
-const CardCache: FC<CardCacheProps> = ({ playersData }) => {
+const CardCache: FC<CardCacheProps> = ({ playerData, position }) => {
   const [cardCacheCard, setCardCacheCard] = useState<Object3D | null>(null);
 
   const updateCardCache = (playerData: Player) => {
@@ -18,21 +18,14 @@ const CardCache: FC<CardCacheProps> = ({ playersData }) => {
       return;
     }
     const showFaceUp = true;
-    const card = createCard(
-      playerData.cardCache,
-      new Vector3(9, 20, 4),
-      showFaceUp
-    );
+    const card = createCard(playerData.cardCache, position, showFaceUp);
     setCardCacheCard(card);
   };
 
   useEffect(() => {
-    const playerData = playersData.find(
-      (player) => player.socketId === socket.id
-    );
     if (!playerData) return;
     updateCardCache(playerData);
-  }, [playersData]);
+  }, [playerData]);
 
   if (!cardCacheCard) return null;
 
