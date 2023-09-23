@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import { socket } from "./socket";
-import ThreeScene from "./components/ThreeScene";
+import { Object3D, Mesh } from "three";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF, PerspectiveCamera } from "@react-three/drei";
 import { ConnectionState } from "./components/ConnectionState";
 import { ConnectionManager } from "./components/ConnectionManager";
 import { JoinSession } from "./components/JoinSession";
 import { Events } from "./components/Events";
 import { Game } from "./types/gameTypes";
 import Action from "./components/Action";
-import CardStack from "./components/CardStack";
-import DepositCards from "./components/DepositCards";
-import CardCache from "./components/CardCache";
+import CardStack from "./components/CardStackOld";
+import DepositCards from "./components/DepositCardsOld";
+import CardCache from "./components/CardCacheOld";
+import { extractCurrentPlayer } from "./helpers";
+import PlayArea from "./components/PlayArea";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -22,7 +26,7 @@ export default function App() {
   const showStartGameButton = session !== "" && clientsInRoom >= 2;
   const showNextGameButton = gameData?.phase === "new round";
 
-  const playersData = extractMyData(gameData);
+  const playersData = extractCurrentPlayer(gameData);
 
   function startGame() {
     socket.emit("new-game", { sessionId: session });
@@ -37,27 +41,12 @@ export default function App() {
     socket.emit("click-card", cardPosition);
   }
 
-  function extractMyData(gameData: Game | null) {
-    if (!gameData) return undefined;
-    return gameData.players.find((player) => player.socketId === socket.id);
-  }
-
   function setTempMessage(message: string) {
     setMessageDisplay(message);
     setTimeout(() => {
       setMessageDisplay("");
     }, 3000);
   }
-
-  useEffect(() => {
-    if (gameData?.phase === "game-over") {
-      setTempMessage("Game Over");
-    } else if (gameData?.phase === "game-started") {
-      setTempMessage("Game Started");
-    } else if (gameData?.phase === "waiting-for-players") {
-      setTempMessage("Waiting for players");
-    }
-  }, [gameData]);
 
   useEffect(() => {
     function onConnect() {
@@ -96,9 +85,57 @@ export default function App() {
     };
   }, []);
 
+  // Three-Fiber
+  const tableModel = useGLTF("/models/table.glb");
+  const heightProportion = 1.25;
+
   return (
     <div className="App">
-      <ThreeScene gameData={gameData} />
+      <div
+        style={{
+          width: window.innerWidth,
+          height: window.innerHeight / heightProportion,
+        }}
+      >
+        <Canvas>
+          <PerspectiveCamera
+            makeDefault
+            manual
+            fov={75}
+            aspect={window.innerWidth / (window.innerHeight / heightProportion)}
+            near={0.1}
+            far={1000}
+            position={[0, 45, 10]}
+            // lookAt={() => new Vector3(0, 0, 0)}
+          />
+          <ambientLight color={0xa3a3a3} intensity={0.1} />
+          <directionalLight
+            color={0xffffff}
+            position={[0, 50, 20]}
+            castShadow
+            shadow-mapSize={[1024, 1024]}
+          />
+          <mesh>
+            <boxGeometry args={[2, 2, 2]} />
+            <meshStandardMaterial color={0x00ff00} />
+          </mesh>
+          <primitive
+            object={tableModel.scene}
+            position={[0, 1.8, 0]}
+            scale={[2, 2, 2]}
+            traverse={(node: Object3D) => {
+              if (node instanceof Mesh) {
+                // node.castShadow = true;
+                node.receiveShadow = true;
+              }
+            }}
+          />
+          <gridHelper args={[100, 100]} />
+          <axesHelper args={[5]} />
+          <OrbitControls />
+          <PlayArea gameData={gameData} />
+        </Canvas>
+      </div>
       <ConnectionState
         isConnected={isConnected}
         session={session}

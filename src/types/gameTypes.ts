@@ -1,3 +1,5 @@
+import { Object3D } from "three";
+
 export type Player = {
   id: number;
   socketId: string;
@@ -10,6 +12,11 @@ export type Player = {
   roundPoints: number;
   totalPoints: number;
   closedRound: boolean;
+};
+
+export type PlayerWithVisualCards = {
+  player: Player;
+  cards: Object3D[];
 };
 
 export type CardValue =

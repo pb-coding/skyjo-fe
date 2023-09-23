@@ -77,7 +77,11 @@ const getCardTexture = (value: number | string) => {
   return cardTexture;
 };
 
-export const createCard = (cardData: Card, position: Vector3) => {
+export const createCard = (
+  cardData: Card,
+  position: Vector3,
+  faceUp: boolean = false
+) => {
   const cardMaterial = [
     new MeshBasicMaterial(),
     new MeshBasicMaterial(),
@@ -89,6 +93,12 @@ export const createCard = (cardData: Card, position: Vector3) => {
   const card = new Mesh(cardGeometry, cardMaterial);
   card.name = cardData.name;
   card.position.copy(position);
+
+  if (faceUp) {
+    card.rotation.x = Math.PI;
+    console.log("faceUp");
+  }
+
   return card;
 };
 
@@ -116,4 +126,30 @@ export const createPlayerCards = (
     playerCards.push(playerCard);
   });
   return playerCards;
+};
+
+export const createCardStaple = (
+  cards: Card[],
+  positionReference: Vector3,
+  faceUp: boolean = false
+) => {
+  const cardStackCards: Mesh<
+    BoxGeometry,
+    MeshBasicMaterial[],
+    Object3DEventMap
+  >[] = [];
+  cards.forEach((card: Card, index: number) => {
+    const cardPositionX = positionReference.x;
+    const cardPositionY = positionReference.y + index * 0.01;
+    const cardPositionZ = positionReference.z;
+
+    const cardPosition = new Vector3(
+      cardPositionX,
+      cardPositionY,
+      cardPositionZ
+    );
+    const cardStackCard = createCard(card, cardPosition, faceUp);
+    cardStackCards.push(cardStackCard);
+  });
+  return cardStackCards;
 };
