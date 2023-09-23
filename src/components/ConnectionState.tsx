@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { socket } from "../socket";
 
+import Text from "../global/Text";
+
 type ConnectionStateProps = {
   isConnected: boolean;
   session: string;
@@ -14,12 +16,12 @@ export const ConnectionState: FC<ConnectionStateProps> = ({
 }) => {
   return (
     <div>
-      <p>
+      <Text>
         State: {"" + isConnected} <br />
         Session: {session} <br />
         Players: {clientsInRoom} <br />
         SocketId: {socket.id}
-      </p>
+      </Text>
     </div>
   );
 };

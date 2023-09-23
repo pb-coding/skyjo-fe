@@ -1,6 +1,9 @@
+import { FC } from "react";
 import { socket } from "../socket";
 
-export function ConnectionManager() {
+import Button from "../global/Button";
+
+export const ConnectionManager: FC = () => {
   function connect() {
     socket.connect();
   }
@@ -11,8 +14,8 @@ export function ConnectionManager() {
 
   return (
     <>
-      <button onClick={connect}>Connect</button>
-      <button onClick={disconnect}>Disconnect</button>
+      <Button onClick={connect}>Connect</Button>
+      <Button onClick={disconnect}>Disconnect</Button>
     </>
   );
-}
+};

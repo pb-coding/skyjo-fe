@@ -14,6 +14,8 @@ import DepositCards from "./components/DepositCardsOld";
 import CardCache from "./components/CardCacheOld";
 import { extractCurrentPlayer } from "./helpers";
 import PlayArea from "./components/PlayArea";
+import Text from "./global/Text";
+import Button from "./global/Button";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -90,7 +92,7 @@ export default function App() {
   const heightProportion = 1.25;
 
   return (
-    <div className="App">
+    <div className="bg-gray-700">
       <div
         style={{
           width: window.innerWidth,
@@ -136,72 +138,79 @@ export default function App() {
           <PlayArea gameData={gameData} />
         </Canvas>
       </div>
+      {messageDispaly && messageDispaly !== "" && <p>{messageDispaly}</p>}
+      <JoinSession session={session} setSession={setSession} />
+      <Text>Player ID: {playersData?.id}</Text>
+      <Text>Player Name: {playersData?.name}</Text>
+      <Text>Player Round Points: {playersData?.roundPoints}</Text>
+      <Text>Player Total Points: {playersData?.totalPoints}</Text>
       <ConnectionState
         isConnected={isConnected}
         session={session}
         clientsInRoom={clientsInRoom}
       />
       <ConnectionManager />
-      <JoinSession session={session} setSession={setSession} />
-      {showStartGameButton && <button onClick={startGame}>Start Game</button>}
-      {showNextGameButton && <button onClick={nextGame}>Next Game</button>}
-      {gameData &&
-        gameData.players.map((playerData, index) => (
-          <div key={index}>
-            <p>Player ID: {playerData.id}</p>
-            <p>Player Name: {playerData.name}</p>
-            <p>Player Round Points: {playerData.roundPoints}</p>
-            <p>Player Total Points: {playerData.totalPoints}</p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Column 1</th>
-                  <th>Column 2</th>
-                  <th>Column 3</th>
-                  <th>Column 4</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array(Math.ceil(playerData.cards.length / 4))
-                  .fill(null)
-                  .map((_, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {Array(4)
-                        .fill(null)
-                        .map((_, colIndex) => {
-                          const card =
-                            playerData.cards[rowIndex * 4 + colIndex];
-                          return (
-                            <td key={colIndex}>
-                              {card && (
-                                <Action
-                                  data={playerData}
-                                  action={() =>
-                                    clickCard(rowIndex * 4 + colIndex)
-                                  }
-                                >
-                                  {card.value}
-                                </Action>
-                              )}
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-            <br />
-            <CardStack gameData={gameData} playerData={playerData} />
-            <DepositCards gameData={gameData} playerData={playerData} />
-            <CardCache playersData={playersData} />
-            <br />
-          </div>
-        ))}
-      <br />
-      <br />
+      {showStartGameButton && <Button onClick={startGame}>Start Game</Button>}
+      {showNextGameButton && <Button onClick={nextGame}>Next Game</Button>}
+      <div className="bg-white">
+        <p> ############### OLD INTERFACE ############### </p>
 
-      {messageDispaly && messageDispaly !== "" && <p>{messageDispaly}</p>}
-      <Events events={messageEvents} />
+        {gameData &&
+          gameData.players.map((playerData, index) => (
+            <div key={index}>
+              <p>Player ID: {playerData.id}</p>
+              <p>Player Name: {playerData.name}</p>
+              <p>Player Round Points: {playerData.roundPoints}</p>
+              <p>Player Total Points: {playerData.totalPoints}</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 3</th>
+                    <th>Column 4</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array(Math.ceil(playerData.cards.length / 4))
+                    .fill(null)
+                    .map((_, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {Array(4)
+                          .fill(null)
+                          .map((_, colIndex) => {
+                            const card =
+                              playerData.cards[rowIndex * 4 + colIndex];
+                            return (
+                              <td key={colIndex}>
+                                {card && (
+                                  <Action
+                                    data={playerData}
+                                    action={() =>
+                                      clickCard(rowIndex * 4 + colIndex)
+                                    }
+                                  >
+                                    {card.value}
+                                  </Action>
+                                )}
+                              </td>
+                            );
+                          })}
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              <br />
+              <CardStack gameData={gameData} playerData={playerData} />
+              <DepositCards gameData={gameData} playerData={playerData} />
+              <CardCache playersData={playersData} />
+              <br />
+            </div>
+          ))}
+        <br />
+        <br />
+        <Events events={messageEvents} />
+      </div>
     </div>
   );
 }

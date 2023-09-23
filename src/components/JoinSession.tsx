@@ -1,6 +1,8 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { socket } from "../socket";
 
+import Button from "../global/Button";
+
 type JoinSessionProps = {
   session: string;
   setSession: Dispatch<SetStateAction<string>>;
@@ -24,7 +26,7 @@ export const JoinSession: FC<JoinSessionProps> = ({ session, setSession }) => {
     <form onSubmit={joinSession}>
       <input onChange={(e) => setSessionField(e.target.value)} />
 
-      <button type="submit">Join</button>
+      <Button>Join</Button>
     </form>
   );
 };
