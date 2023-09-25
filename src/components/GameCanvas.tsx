@@ -1,10 +1,11 @@
 import { FC } from "react";
-import { Object3D, Mesh } from "three";
+import { Object3D, Mesh, Vector3 } from "three";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 
 import PlayArea from "../components/PlayArea";
 import { Game } from "../types/gameTypes";
+import { createFloor } from "../objects/floor";
 
 type GameCanvasProps = {
   session: string;
@@ -16,6 +17,8 @@ const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
   const heightProportion = 1.4;
   const aspectRatio =
     window.innerWidth / (window.innerHeight / heightProportion);
+
+  const floorObject = createFloor(new Vector3(0, 0, 0));
 
   if (!gameData) return null;
 
@@ -60,6 +63,7 @@ const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
         <gridHelper args={[100, 100]} />
         <axesHelper args={[5]} />
         <PlayArea gameData={gameData} />
+        <primitive object={floorObject} />
       </Canvas>
     </div>
   );
