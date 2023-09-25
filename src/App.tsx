@@ -22,7 +22,7 @@ export default function App() {
     setMessageDisplay(message);
     setTimeout(() => {
       setMessageDisplay("");
-    }, 800);
+    }, 3000);
   }
 
   useEffect(() => {
@@ -39,12 +39,7 @@ export default function App() {
     }
 
     function onMessageEvent(message: string) {
-      if (
-        message.includes(" won ") ||
-        message.includes(" equally ") ||
-        message.includes(" doubled ")
-      )
-        setTempMessage(message);
+      setTempMessage(message);
       // setMessageEvents((previous) => [...previous, message]);
     }
 
@@ -73,6 +68,7 @@ export default function App() {
     <div className="bg-gray-900 w-screen h-screen">
       {!gameData && (
         <SessionManager
+          isConnected={isConnected}
           clientsInRoom={clientsInRoom}
           setClientsInRoom={setClientsInRoom}
           session={session}
@@ -82,12 +78,12 @@ export default function App() {
       )}
       <GameCanvas session={session} gameData={gameData} />
       <MessageDisplay message={messageDispaly} />
-      {session !== "" && (
+      {gameData && session !== "" && (
         <Footer
           isConnected={isConnected}
           session={session}
           clientsInRoom={clientsInRoom}
-          playerData={gameData?.players ?? []}
+          gameData={gameData}
           showNextGameButton={showNextGameButton}
           setClientsInRoom={setClientsInRoom}
           setSession={setSession}

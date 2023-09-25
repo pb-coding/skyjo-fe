@@ -3,13 +3,14 @@ import { socket } from "../socket";
 
 import Text from "../global/Text";
 import Button from "../global/Button";
-import { Player } from "../types/gameTypes";
+import { Game } from "../types/gameTypes";
+import { ConnectedIndicator, DisconnectedIndicator } from "./Indicators";
 
 type Footer = {
   isConnected: boolean;
   session: string;
   clientsInRoom: number;
-  playerData: Player[];
+  gameData: Game;
   showNextGameButton: boolean;
   setClientsInRoom: Dispatch<SetStateAction<number>>;
   setSession: Dispatch<SetStateAction<string>>;
@@ -20,7 +21,7 @@ type Footer = {
 export const Footer: FC<Footer> = ({
   isConnected,
   session,
-  playerData,
+  gameData,
   showNextGameButton,
   setClientsInRoom,
   setSession,
@@ -35,13 +36,7 @@ export const Footer: FC<Footer> = ({
     setSession("");
   }
 
-  const ConnectedIndicator: FC = () => (
-    <span className="ml-2 flex w-2.5 h-2.5 bg-green-500 rounded-full"></span>
-  );
-
-  const DisconnectedIndicator: FC = () => (
-    <span className="ml-2 flex w-2 h-2 bg-red-500 rounded-full"></span>
-  );
+  const isEndOfGame = gameData.phase === "game ended";
 
   return (
     <div
@@ -56,18 +51,22 @@ export const Footer: FC<Footer> = ({
           {isConnected ? <ConnectedIndicator /> : <DisconnectedIndicator />}
         </div>
         <div className="flex justify-between items-center">
-          {showNextGameButton && <Button onClick={nextGame}>Next Game</Button>}
+          {!isEndOfGame && showNextGameButton && (
+            <Button onClick={nextGame}>Next Game</Button>
+          )}
+          {isEndOfGame && <p className="mr-4">Game is over</p>}
           <Button variant="secondary" onClick={() => leaveSession(session)}>
             Leave
           </Button>
         </div>
       </div>
-      {playerData.map((player) => (
+      {gameData.players.map((player) => (
         <div className="mb-3 pt-2 mt-2 border-t border-gray-600">
           <div className="flex justify-between items-center">
             <Text>
               {player?.name} {player.socketId == socket.id && "👤"}{" "}
               {player.playersTurn && <span className="text-green-500">⏩</span>}
+              {isEndOfGame && player.place == 1 && "🏆"}
             </Text>
             <p></p>
           </div>

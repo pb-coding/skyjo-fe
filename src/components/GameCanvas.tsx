@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Object3D, Mesh } from "three";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF, PerspectiveCamera } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 import PlayArea from "../components/PlayArea";
 import { Game } from "../types/gameTypes";
@@ -14,6 +14,8 @@ type GameCanvasProps = {
 const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
   const tableModel = useGLTF("/models/table.glb");
   const heightProportion = 1.4;
+  const aspectRatio =
+    window.innerWidth / (window.innerHeight / heightProportion);
 
   if (!gameData) return null;
 
@@ -24,17 +26,15 @@ const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
         height: window.innerHeight / heightProportion,
       }}
     >
-      <Canvas>
-        <PerspectiveCamera
-          makeDefault
-          manual
-          fov={75}
-          aspect={window.innerWidth / (window.innerHeight / heightProportion)}
-          near={0.1}
-          far={1000}
-          position={[0, 43, 10]}
-          // lookAt={() => new Vector3(0, 20, 0)}
-        />
+      <Canvas
+        camera={{
+          position: [0, 43, 10],
+          fov: 75,
+          near: 0.1,
+          far: 1000,
+          aspect: aspectRatio,
+        }}
+      >
         <ambientLight color={0xa3a3a3} intensity={0.1} />
         <directionalLight
           color={0xffffff}
@@ -59,7 +59,6 @@ const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
         />
         <gridHelper args={[100, 100]} />
         <axesHelper args={[5]} />
-        <OrbitControls />
         <PlayArea gameData={gameData} />
       </Canvas>
     </div>

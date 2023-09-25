@@ -12,6 +12,7 @@ export type Player = {
   roundPoints: number;
   totalPoints: number;
   closedRound: boolean;
+  place: number;
 };
 
 export type PlayerWithVisualCards = {

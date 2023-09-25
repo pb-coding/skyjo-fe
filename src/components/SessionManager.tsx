@@ -1,9 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { socket } from "../socket";
 
+import { ConnectedIndicator, DisconnectedIndicator } from "./Indicators";
 import Button from "../global/Button";
 
 type SessionManagerProps = {
+  isConnected: boolean;
   clientsInRoom: number;
   setClientsInRoom: Dispatch<SetStateAction<number>>;
   session: string;
@@ -12,6 +14,7 @@ type SessionManagerProps = {
 };
 
 export const SessionManager: FC<SessionManagerProps> = ({
+  isConnected,
   clientsInRoom,
   setClientsInRoom,
   session,
@@ -89,6 +92,10 @@ export const SessionManager: FC<SessionManagerProps> = ({
               Leave Session
             </Button>
           )}
+          <div className="mt-8 flex justify-center items-center">
+            <span className="text-gray-200">Game Server: </span>
+            {isConnected ? <ConnectedIndicator /> : <DisconnectedIndicator />}
+          </div>
         </div>
       </div>
     </section>
