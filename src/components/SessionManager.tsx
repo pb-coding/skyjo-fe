@@ -3,15 +3,17 @@ import { socket } from "../socket";
 
 import Button from "../global/Button";
 
-type JoinSessionProps = {
+type SessionManagerProps = {
   clientsInRoom: number;
+  setClientsInRoom: Dispatch<SetStateAction<number>>;
   session: string;
   setSession: Dispatch<SetStateAction<string>>;
   showStartGameButton: boolean;
 };
 
-export const JoinSession: FC<JoinSessionProps> = ({
+export const SessionManager: FC<SessionManagerProps> = ({
   clientsInRoom,
+  setClientsInRoom,
   session,
   setSession,
   showStartGameButton,
@@ -23,6 +25,12 @@ export const JoinSession: FC<JoinSessionProps> = ({
     socket.emit("join-session", sessionField);
     setSession(sessionField);
     setSessionField("");
+  }
+
+  function leaveSession(sessionName: string) {
+    socket.emit("leave-session", sessionName);
+    setClientsInRoom(0);
+    setSession("");
   }
 
   function startGame() {
@@ -75,6 +83,11 @@ export const JoinSession: FC<JoinSessionProps> = ({
           <br />
           {showStartGameButton && (
             <Button onClick={startGame}>Start Game</Button>
+          )}
+          {isActiveSession && (
+            <Button variant="secondary" onClick={() => leaveSession(session)}>
+              Leave Session
+            </Button>
           )}
         </div>
       </div>

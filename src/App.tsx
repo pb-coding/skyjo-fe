@@ -3,7 +3,7 @@ import { socket } from "./socket";
 
 import GameCanvas from "./components/GameCanvas";
 import { Footer } from "./components/Footer";
-import { JoinSession } from "./components/JoinSession";
+import { SessionManager } from "./components/SessionManager";
 import { Game } from "./types/gameTypes";
 import MessageDisplay from "./components/MessageDisplay";
 
@@ -72,8 +72,9 @@ export default function App() {
   return (
     <div className="bg-gray-900 w-screen h-screen">
       {!gameData && (
-        <JoinSession
+        <SessionManager
           clientsInRoom={clientsInRoom}
+          setClientsInRoom={setClientsInRoom}
           session={session}
           setSession={setSession}
           showStartGameButton={showStartGameButton}
@@ -88,6 +89,8 @@ export default function App() {
           clientsInRoom={clientsInRoom}
           playerData={gameData?.players ?? []}
           showNextGameButton={showNextGameButton}
+          setClientsInRoom={setClientsInRoom}
+          setSession={setSession}
         />
       )}
     </div>

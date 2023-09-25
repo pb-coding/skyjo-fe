@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { socket } from "../socket";
 
 import Text from "../global/Text";
@@ -11,6 +11,8 @@ type Footer = {
   clientsInRoom: number;
   playerData: Player[];
   showNextGameButton: boolean;
+  setClientsInRoom: Dispatch<SetStateAction<number>>;
+  setSession: Dispatch<SetStateAction<string>>;
 };
 
 // TODO: use clients in room to validate player count
@@ -20,9 +22,17 @@ export const Footer: FC<Footer> = ({
   session,
   playerData,
   showNextGameButton,
+  setClientsInRoom,
+  setSession,
 }) => {
   function nextGame() {
     socket.emit("next-round", { sessionId: session });
+  }
+
+  function leaveSession(sessionName: string) {
+    socket.emit("leave-session", sessionName);
+    setClientsInRoom(0);
+    setSession("");
   }
 
   const ConnectedIndicator: FC = () => (
@@ -47,10 +57,7 @@ export const Footer: FC<Footer> = ({
         </div>
         <div className="flex justify-between items-center">
           {showNextGameButton && <Button onClick={nextGame}>Next Game</Button>}
-          <Button
-            variant="secondary"
-            onClick={() => socket.emit("leave-session")}
-          >
+          <Button variant="secondary" onClick={() => leaveSession(session)}>
             Leave
           </Button>
         </div>
