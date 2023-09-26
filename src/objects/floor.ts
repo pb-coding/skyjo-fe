@@ -5,20 +5,33 @@ import {
   SRGBColorSpace,
   Vector3,
   Mesh,
+  RepeatWrapping,
 } from "three";
 
-const textureLoader = new TextureLoader();
-const floorSize = 200;
-const floorGeometry = new BoxGeometry(
-  floorSize * 1,
-  floorSize * 0.001,
-  floorSize * 1
-);
+export const createFloor = (
+  position: Vector3,
+  sizeObject: { x: number; y: number; z: number },
+  texturePath: string,
+  floorSize: number,
+  repeating: boolean = false,
+  repeatX: number = 1,
+  repeatY: number = 1
+) => {
+  const textureLoader = new TextureLoader();
+  const floorGeometry = new BoxGeometry(
+    floorSize * sizeObject.x,
+    floorSize * sizeObject.y,
+    floorSize * sizeObject.z
+  );
 
-const floorTexture = textureLoader.load("/textures/floor.jpg");
-floorTexture.colorSpace = SRGBColorSpace;
+  const floorTexture = textureLoader.load(texturePath);
+  floorTexture.colorSpace = SRGBColorSpace;
+  if (repeating) {
+    floorTexture.wrapS = RepeatWrapping;
+    floorTexture.wrapT = RepeatWrapping;
+    floorTexture.repeat.set(repeatX, repeatY);
+  }
 
-export const createFloor = (position: Vector3) => {
   const floorMaterial = [
     new MeshBasicMaterial(),
     new MeshBasicMaterial(),
