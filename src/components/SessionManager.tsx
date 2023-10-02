@@ -13,6 +13,8 @@ type SessionManagerProps = {
   showStartGameButton: boolean;
 };
 
+type SessionResponse = "success" | "error:full" | "error:running";
+
 export const SessionManager: FC<SessionManagerProps> = ({
   isConnected,
   clientsInRoom,
@@ -25,9 +27,11 @@ export const SessionManager: FC<SessionManagerProps> = ({
 
   function joinSession(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    socket.emit("join-session", sessionField);
-    setSession(sessionField);
-    setSessionField("");
+    socket.emit("join-session", sessionField, (response: SessionResponse) => {
+      if (response !== "success") return;
+      setSession(sessionField);
+      setSessionField("");
+    });
   }
 
   function leaveSession(sessionName: string) {
@@ -52,10 +56,10 @@ export const SessionManager: FC<SessionManagerProps> = ({
       >
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl text-white">
-            Skyjo
+            Skylo
           </h1>
           <p className="mb-8 text-lg font-normal lg:text-xl sm:px-16 lg:px-48 text-gray-200">
-            Play Skyjo online with your friends!
+            Play Skylo online with your friends!
           </p>
           <div className="p-4">
             {!isActiveSession && (
@@ -64,7 +68,7 @@ export const SessionManager: FC<SessionManagerProps> = ({
                   htmlFor="first_name"
                   className="block mb-2 text-sm font-medium text-white"
                 >
-                  Join Skyjo Session
+                  Join Skylo Session
                 </label>
                 <div className="flex space-x-1 items-center">
                   <input

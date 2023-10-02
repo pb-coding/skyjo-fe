@@ -4,8 +4,8 @@ export type Player = {
   id: number;
   socketId: string;
   name: string;
-  cards: Card[];
-  knownCardPositions: boolean[];
+  deck: Deck;
+  knownCardPositions: KnownCardsColumn[];
   playersTurn: boolean;
   cardCache: Card | null;
   tookDispiledCard: boolean;
@@ -15,12 +15,21 @@ export type Player = {
   place: number;
 };
 
-export type PlayerWithVisualCards = {
+export type PlayerVisualDeck = {
   player: Player;
-  cards: Object3D[];
+  visualDeck: VisualDeck;
 };
 
-export type CardValue =
+export type VisualColumn = [Object3D, Object3D, Object3D];
+
+export type VisualDeck = VisualColumn[];
+
+export type Column = [Card, Card, Card];
+export type KnownCardsColumn = [boolean, boolean, boolean];
+
+export type Deck = Column[];
+
+export type Card =
   | -2
   | -1
   | 0
@@ -36,13 +45,7 @@ export type CardValue =
   | 10
   | 11
   | 12
-  | "X";
-
-export type Card = {
-  id: number;
-  name: string;
-  value: CardValue;
-};
+  | null;
 
 export type CardStack = {
   cards: Card[];

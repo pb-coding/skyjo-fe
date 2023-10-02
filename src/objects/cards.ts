@@ -6,9 +6,10 @@ import {
   Vector3,
   Mesh,
   Object3DEventMap,
+  Object3D,
 } from "three";
 
-import { Card } from "../types/gameTypes";
+import { Card, Deck, VisualColumn, VisualDeck } from "../types/gameTypes";
 
 const textureLoader = new TextureLoader();
 const cardSize = 5;
@@ -18,7 +19,7 @@ const cardGeometry = new BoxGeometry(
   cardSize * 0.6
 );
 
-const getCardTexture = (value: number | string) => {
+const getCardTexture = (value: number | null) => {
   let cardTexture;
   switch (value) {
     case -2:
@@ -66,7 +67,7 @@ const getCardTexture = (value: number | string) => {
     case 12:
       cardTexture = textureLoader.load("/textures/card-12.png");
       break;
-    case "X":
+    case null:
       cardTexture = textureLoader.load("/textures/card-back.png");
       break;
     default:
@@ -78,54 +79,53 @@ const getCardTexture = (value: number | string) => {
 };
 
 export const createCard = (
-  cardData: Card,
+  card: Card,
   position: Vector3,
   faceUp: boolean = false
 ) => {
   const cardMaterial = [
     new MeshBasicMaterial(),
     new MeshBasicMaterial(),
-    new MeshBasicMaterial({ map: getCardTexture("X") }), // X = backside
-    new MeshBasicMaterial({ map: getCardTexture(cardData.value) }),
+    new MeshBasicMaterial({ map: getCardTexture(null) }), // X = backside
+    new MeshBasicMaterial({ map: getCardTexture(card) }),
     new MeshBasicMaterial(),
     new MeshBasicMaterial(),
   ];
-  const card = new Mesh(cardGeometry, cardMaterial);
-  card.name = cardData.name;
-  card.position.copy(position);
+  const visualCard = new Mesh(cardGeometry, cardMaterial);
+  visualCard.name = card !== null ? card.toString() : "Facedown card";
+  visualCard.position.copy(position);
 
   if (faceUp) {
-    card.rotation.x = Math.PI;
-    console.log("faceUp");
+    visualCard.rotation.x = Math.PI;
   }
 
-  return card;
+  return visualCard;
 };
 
-export const createPlayerCards = (
-  cards: Card[],
-  positionReference: Vector3
-) => {
-  const playerCards: Mesh<
-    BoxGeometry,
-    MeshBasicMaterial[],
-    Object3DEventMap
-  >[] = [];
-  cards.forEach((card, index) => {
-    const cardPositionX = positionReference.x + (index % 4) * 4 - 6;
-    const cardPositionY = positionReference.y;
-    const cardPositionZ =
-      positionReference.z + (Math.ceil((index + 1) / 4) - 1) * 4 - 8;
+export const createPlayerCards = (deck: Deck, positionReference: Vector3) => {
+  const playerDeck: Object3D[][] = [];
 
-    const cardPosition = new Vector3(
-      cardPositionX,
-      cardPositionY,
-      cardPositionZ
-    );
-    const playerCard = createCard(card, cardPosition);
-    playerCards.push(playerCard);
+  let visualColumn: Object3D[] = [];
+  deck.forEach((column, columnIndex) => {
+    column.forEach((card, cardIndex) => {
+      const cardPositionX = positionReference.x + columnIndex * 4 - 6;
+      const cardPositionY = positionReference.y;
+      const cardPositionZ = positionReference.z + cardIndex * 4 - 8;
+
+      const cardPosition = new Vector3(
+        cardPositionX,
+        cardPositionY,
+        cardPositionZ
+      );
+      const playerCard = createCard(card, cardPosition);
+      visualColumn.push(playerCard);
+      if (cardIndex === 2) {
+        playerDeck.push(visualColumn as VisualColumn);
+        visualColumn = [];
+      }
+    });
   });
-  return playerCards;
+  return playerDeck as VisualDeck;
 };
 
 export const createCardStaple = (

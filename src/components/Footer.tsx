@@ -60,8 +60,8 @@ export const Footer: FC<Footer> = ({
           </Button>
         </div>
       </div>
-      {gameData.players.map((player) => (
-        <div className="mb-3 pt-2 mt-2 border-t border-gray-600">
+      {gameData.players.map((player, index) => (
+        <div key={index} className="mb-3 pt-2 mt-2 border-t border-gray-600">
           <div className="flex justify-between items-center">
             <Text>
               {player?.name} {player.socketId == socket.id && "👤"}{" "}

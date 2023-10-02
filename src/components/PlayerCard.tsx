@@ -2,22 +2,25 @@ import { FC, useState, useEffect } from "react";
 import { Object3D, Object3DEventMap } from "three";
 // import { useFrame } from "@react-three/fiber";
 import { socket } from "../socket";
-import { PlayerWithVisualCards } from "../types/gameTypes";
+import { PlayerVisualDeck } from "../types/gameTypes";
 
 type PlayerCardProps = {
   card: Object3D<Object3DEventMap>;
-  index: number;
+  columnIndex: number;
+  cardIndex: number;
   isCurrentPlayer: boolean;
-  playerWithCards: PlayerWithVisualCards;
+  visualPlayerDeck: PlayerVisualDeck;
 };
 
 const PlayerCard: FC<PlayerCardProps> = ({
   card,
-  index,
+  columnIndex,
+  cardIndex,
   isCurrentPlayer,
-  playerWithCards,
+  visualPlayerDeck,
 }) => {
-  const isCardRevealed = playerWithCards.player.knownCardPositions[index];
+  const isCardRevealed =
+    visualPlayerDeck.player.knownCardPositions[columnIndex][cardIndex];
   const [cardObject, setCardObject] =
     useState<Object3D<Object3DEventMap>>(card);
 
@@ -54,16 +57,15 @@ const PlayerCard: FC<PlayerCardProps> = ({
   const clickCard = () => {
     if (!isCurrentPlayer) return;
     console.log("Clicked on one of my cards");
-    socket.emit("click-card", index, (response: string) => {
-      console.log("Response:", response);
-      /*if (rotationGoal === 0) {
-        setRotationGoal(Math.PI);
-      } else {
-        setRotationGoal(0);
-      }*/
-    });
+    socket.emit("click-card", [columnIndex, cardIndex]);
   };
-  return <primitive object={cardObject} onClick={() => clickCard()} />;
+  return (
+    <primitive
+      key={columnIndex + cardIndex * 4}
+      object={cardObject}
+      onClick={() => clickCard()}
+    />
+  );
 };
 
 export default PlayerCard;

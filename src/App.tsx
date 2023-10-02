@@ -62,8 +62,6 @@ export default function App() {
     };
   }, []);
 
-  console.log(messageDispaly);
-
   return (
     <div className="bg-gray-900 w-screen h-screen">
       {!gameData && (

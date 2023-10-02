@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import PlayerCards from "../components/PlayerCards";
+import PlayerDecks from "./PlayerDecks";
 import { Game } from "../types/gameTypes";
 import CardStackStaple from "./CardStackStaple";
 import DiscardPile from "./DiscardPile";
@@ -14,7 +14,7 @@ const PlayArea: FC<PlayAreaProps> = ({ gameData }) => {
 
   return (
     <>
-      <PlayerCards playersData={gameData.players} />
+      <PlayerDecks playersData={gameData.players} />
       <CardStackStaple cardStackData={gameData.cardStack} />
       <DiscardPile discardPileData={gameData.discardPile} />
     </>
