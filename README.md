@@ -20,4 +20,7 @@ Game play:
 ![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/73111d78-3e7e-4916-9b9d-4db6d8fee317)
 
 
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/717cff3d-0d4b-4fcd-845d-ef52c934090f)
+
+
 Backend: https://github.com/pb-coding/skyjo-be
