@@ -2,6 +2,8 @@
 
 Skylo is a digital card game, which has some similarities to the popular card game Skyjo ;)
 
+Play latest release here: https://skyjo.voltvector.org/
+
 This is the frontend of this web based game using:
 - Typescript
 - React
