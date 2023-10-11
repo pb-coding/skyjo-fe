@@ -3,7 +3,7 @@ import { Vector3 } from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 
-import Music from "../components/Music";
+// import Music from "../components/Music";
 import Model from "../components/Model";
 import PlayArea from "../components/PlayArea";
 import { Game } from "../types/gameTypes";
@@ -58,7 +58,7 @@ const GameCanvas: FC<GameCanvasProps> = ({ gameData }) => {
         }}
       >
         <Environment preset="apartment" />
-        <Music />
+        {/* Music is currently disabled <Music /> - uncomment to enable */}
         {/*<ambientLight color={0xa3a3a3} intensity={0.1} />
         <directionalLight
           color={0xffffff}
