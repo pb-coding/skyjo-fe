@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { socket } from "./socket";
-import SimplePeer from "simple-peer";
 
 import GameCanvas from "./components/GameCanvas";
 import { Footer } from "./components/Footer";
@@ -53,50 +52,6 @@ export default function App() {
     socket.on("message", onMessageEvent);
     socket.on("clients-in-session", onClientsInRoomUpdate);
     socket.on("game-update", onGameUpdate);
-
-    const peers = new Map<string, SimplePeer.Instance>();
-
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        socket.on("initiate-voice-chat", (data) => {
-          const { to } = data;
-          console.log("Initiating voice chat with", to);
-
-          const peer = new SimplePeer({ initiator: true, stream });
-
-          peers.set(to, peer);
-
-          peer.on("signal", (signalData) => {
-            socket.emit("signal", { to, signalData });
-          });
-        });
-
-        socket.on("signal", (data) => {
-          const { from, signalData } = data;
-          let peer = peers.get(from);
-
-          if (!peer) {
-            peer = new SimplePeer({ initiator: false, stream });
-            peers.set(from, peer);
-
-            peer.on("signal", (signalData) => {
-              socket.emit("signal", { to: from, signalData });
-            });
-
-            peer.on("stream", (remoteStream) => {
-              const audioEl = new Audio();
-              audioEl.srcObject = remoteStream;
-              audioEl.play();
-            });
-          }
-
-          peer.signal(signalData);
-        });
-      })
-      .catch((err) => {
-        console.log("Error getting user media", err);
-      });
 
     return () => {
       socket.off("connect", onConnect);

@@ -3,6 +3,7 @@ import { socket } from "../socket";
 
 import { ConnectedIndicator, DisconnectedIndicator } from "./Indicators";
 import Button from "../global/Button";
+import VoiceChat from "./VoiceChat";
 
 type SessionManagerProps = {
   isConnected: boolean;
@@ -100,6 +101,7 @@ export const SessionManager: FC<SessionManagerProps> = ({
             <span className="text-gray-200">Game Server: </span>
             {isConnected ? <ConnectedIndicator /> : <DisconnectedIndicator />}
           </div>
+          <VoiceChat session={session} />
         </div>
       </div>
     </section>
