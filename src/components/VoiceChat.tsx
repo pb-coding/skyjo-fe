@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { socket } from "../socket";
 
 type VoiceChatProps = {
@@ -18,8 +18,8 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     iceCandidatePoolSize: 10,
   };
 
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  // const localAudioRef = useRef<HTMLAudioElement>(null);
+  const remoteAudioRef = useRef<HTMLAudioElement>(null);
 
   const localStreamRef = useRef<MediaStream | null>(null);
   const remoteStreamRef = useRef<MediaStream>(new MediaStream());
@@ -31,18 +31,18 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     sessionRef.current = session;
   }, [session]);
 
-  const [isWebcamSetup, setIsWebcamSetup] = useState(false);
-
-  // Setup media sources
-  const setupWebcam = async () => {
+  const setupAudio = async () => {
     localStreamRef.current = await navigator.mediaDevices.getUserMedia({
-      video: true,
+      video: false, // disabled video for now
       audio: true,
     });
 
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = localStreamRef.current;
+    // only when using video the own video stream is displayed
+    /*
+    if (localAudioRef.current) {
+      localAudioRef.current.srcObject = localStreamRef.current;
     }
+    */
 
     localStreamRef.current.getTracks().forEach((track) => {
       if (!localStreamRef.current) return;
@@ -50,7 +50,6 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     });
   };
 
-  // Create an offer
   const createOffer = async () => {
     const offerDescription = await pc.current.createOffer();
     await pc.current.setLocalDescription(offerDescription);
@@ -58,7 +57,6 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     socket.emit("create-offer", { offerDescription, sessionName: session });
   };
 
-  // Answer the call
   const answerCall = async (offer: RTCSessionDescriptionInit) => {
     console.log("Answer call triggered");
 
@@ -76,12 +74,15 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
   };
 
   useEffect(() => {
-    if (localVideoRef.current && localStreamRef.current) {
-      localVideoRef.current.srcObject = localStreamRef.current;
+    // only when using video the own video stream is displayed
+    /*
+    if (localAudioRef.current && localStreamRef.current) {
+      localAudioRef.current.srcObject = localStreamRef.current;
     }
+    */
 
-    if (remoteVideoRef.current) {
-      remoteVideoRef.current.srcObject = remoteStreamRef.current;
+    if (remoteAudioRef.current) {
+      remoteAudioRef.current.srcObject = remoteStreamRef.current;
     }
 
     socket.on("offer-made", async (offer) => {
@@ -93,7 +94,6 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
       console.log("Answer received:", answer);
       await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
       console.log("set remote description", pc.current);
-      console.log("set");
     });
 
     socket.on("add-ice-candidate", (candidate) => {
@@ -117,59 +117,31 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
         remoteStreamRef.current.addTrack(track);
       });
       console.log("remote stream", remoteStreamRef.current);
-      if (remoteVideoRef.current) {
+      if (remoteAudioRef.current) {
         console.log("setting remote video ref");
-        remoteVideoRef.current.srcObject = remoteStreamRef.current;
+        remoteAudioRef.current.srcObject = remoteStreamRef.current;
       }
     };
   }, []);
 
-  const startWebcam = async () => {
-    await setupWebcam();
-    setIsWebcamSetup(true);
-  };
-
-  const initiateCall = async () => {
-    if (isWebcamSetup) {
-      // Only allow calls if the webcam is set up
-      await createOffer();
-    } else {
-      console.log("Please set up your webcam first.");
+  const enableAudio = async () => {
+    if (!session || session === "") {
+      console.log("You need to be in a session to start voice chat.");
+      return;
     }
+    await setupAudio();
+    console.log("Audio enabled");
+    await createOffer();
+    console.log("Offer created");
   };
 
   return (
     <div style={{ zIndex: 100 }}>
-      <h2>Webcam</h2>
-      <div className="videos">
-        <span>
-          <h3>Local Stream</h3>
-          <video ref={localVideoRef} autoPlay muted></video>
-        </span>
-        <span>
-          <h3>Remote Stream</h3>
-          <video ref={remoteVideoRef} autoPlay></video>
-        </span>
-      </div>
+      {/*<audio ref={localAudioRef} autoPlay muted></audio>*/}
+      <audio ref={remoteAudioRef} autoPlay></audio>
 
-      <button style={{ zIndex: 100 }} onClick={startWebcam}>
-        Start Webcam
-      </button>
-      <h2>2. Create a new Call</h2>
-      <button onClick={initiateCall}>Initiate Call</button>
-
-      <h2>3. Join a Call</h2>
-      <p>Answer the call from a different browser window or device</p>
-
-      <input id="callInput" />
-      <button id="answerButton" disabled>
-        Answer
-      </button>
-
-      <h2>4. Hangup</h2>
-
-      <button id="hangupButton" disabled>
-        Hangup
+      <button style={{ zIndex: 100 }} onClick={enableAudio}>
+        Enable Voice Chat
       </button>
     </div>
   );
