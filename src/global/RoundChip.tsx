@@ -7,7 +7,7 @@ type RoundChipProps = {
 
 const RoundChip: FC<RoundChipProps> = ({ description, children }) => {
   return (
-    <span className="inline-flex items-center justify-center w-12 h-12 ml-4 mt-4 text-sm font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300">
+    <span className="inline-flex items-center justify-center w-8 h-8 ml-4 mt-4 text-sm font-semibold rounded-full bg-theme-secondary hover:bg-theme-secondary-hover text-white">
       {children}
       <span className="sr-only">{description}</span>
     </span>

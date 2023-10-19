@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-import colors from "tailwindcss/colors";
+
+import color from "tailwindcss/colors";
+
 export default {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite-react/**/*.js",
   ],
   theme: {
@@ -18,18 +21,21 @@ export default {
         95: "0.95",
       },
       colors: {
-        transparent: "transparent",
-        current: "currentColor",
-        black: colors.black,
-        white: colors.white,
-        emerald: colors.emerald,
-        indigo: colors.indigo,
-        yellow: colors.yellow,
-        stone: colors.stone,
-        sky: colors.sky,
-        neutral: colors.neutral,
-        gray: colors.gray,
-        slate: colors.slate,
+        "theme-bg": color.teal[400],
+        "theme-primary": color.green[800],
+        "theme-primary-hover": color.green[700],
+        "theme-secondary": color.red[400],
+        "theme-secondary-hover": color.red[300],
+        "theme-tertiary": color.teal[200],
+        "theme-font": color.gray[800],
+        "theme-accent": color.yellow[500],
+      },
+      fontFamily: {
+        theme: ["Alegreya", "serif"],
+      },
+      dropShadow: {
+        white: "2px 2px 2px rgba(255, 255, 255, 1)",
+        black: "2px 2px 2px rgba(0, 0, 0, 1)",
       },
     },
   },

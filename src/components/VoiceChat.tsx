@@ -154,7 +154,7 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
       {/*<audio ref={localAudioRef} autoPlay muted></audio>*/}
       <audio ref={remoteAudioRef} autoPlay></audio>
       <button onClick={toggleAudio}>
-        <HeadsetIcon />
+        <HeadsetIcon enabled={isAudioEnabled} />
       </button>
     </div>
   );

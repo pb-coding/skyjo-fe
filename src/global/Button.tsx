@@ -9,7 +9,7 @@ const Button: FC<ButtonProps> = ({ variant, children, ...rest }) => {
   if (variant === "secondary") {
     return (
       <button
-        className="text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-3 py-2 mr-2 bg-gray-800 hover:bg-gray-700 focus:ring-gray-700 border-gray-700"
+        className="border border-black text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-3 py-2 mr-2 bg-theme-secondary hover:bg-theme-secondary-hover focus:ring-gray-700"
         {...rest}
       >
         {children}
@@ -18,7 +18,7 @@ const Button: FC<ButtonProps> = ({ variant, children, ...rest }) => {
   }
   return (
     <button
-      className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 bg-lime-700 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+      className="border border-black text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 bg-theme-primary hover:bg-theme-primary-hover focus:outline-none focus:ring-blue-800"
       {...rest}
     >
       {children}

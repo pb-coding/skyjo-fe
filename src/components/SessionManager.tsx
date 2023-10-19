@@ -3,6 +3,7 @@ import { socket } from "../socket";
 
 import { ConnectedIndicator, DisconnectedIndicator } from "./Indicators";
 import Button from "../global/Button";
+import CardFanAnimation from "./CardFanAnimation";
 
 type SessionManagerProps = {
   isConnected: boolean;
@@ -48,12 +49,12 @@ export const SessionManager: FC<SessionManagerProps> = ({
 
   return (
     <section>
-      <div className="w-full h-full absolute top-0 left-0 z-0 bg-teal-500">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl text-white">
-            Skylo
+      <div className="w-full h-full absolute top-0 left-0 z-0 bg-gradient-to-b from-theme-bg to-teal-500">
+        <div className="font-theme py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
+          <h1 className="drop-shadow-black mb-4 text-7xl font-extrabold tracking-tight leading-none md:text-8xl lg:text-8xl text-white">
+            SKYLO
           </h1>
-          <p className="mb-8 text-lg font-normal lg:text-xl sm:px-16 lg:px-48 text-gray-200">
+          <p className="mb-8 text-lg font-bold lg:text-xl sm:px-16 lg:px-48 text-theme-primary">
             Play Skylo online with your friends!
           </p>
           <div className="p-4">
@@ -61,13 +62,13 @@ export const SessionManager: FC<SessionManagerProps> = ({
               <form onSubmit={joinSession}>
                 <label
                   htmlFor="first_name"
-                  className="block mb-2 text-sm font-medium text-white"
+                  className="block mb-2 text-md font-medium text-theme-font drop-shadow-white"
                 >
                   Join Skylo Session
                 </label>
                 <div className="flex space-x-1 items-center">
                   <input
-                    className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className="border text-sm rounded-lg block w-full p-2.5 bg-theme-tertiary border-black placeholder-gray-400 text-theme-font focus:ring-theme-primary focus:border-theme-primary"
                     placeholder="Session name"
                     required
                     onChange={(e) => setSessionField(e.target.value)}
@@ -78,23 +79,44 @@ export const SessionManager: FC<SessionManagerProps> = ({
             )}
           </div>
 
-          <p className="text-gray-200 text-3xl my-2">Session: {session}</p>
-          <p className="text-gray-200 text-3xl my-4">
-            Players: {clientsInRoom}
-          </p>
-          <br />
-          {showStartGameButton && (
-            <Button onClick={startGame}>Start Game</Button>
-          )}
-          {isActiveSession && (
-            <Button variant="secondary" onClick={() => leaveSession(session)}>
-              Leave Session
-            </Button>
-          )}
-          <div className="mt-8 flex justify-center items-center">
-            <span className="text-gray-200">Game Server: </span>
+          <div className="mx-4 py-4 bg-teal-200 border border-black rounded-lg">
+            {isActiveSession && (
+              <p className="text-theme-font text-3xl drop-shadow-white my-2">
+                Session: {session}
+              </p>
+            )}
+            <p className="text-theme-font text-3xl drop-shadow-white mt-4">
+              Players: {clientsInRoom}
+            </p>
+            <br />
+            {showStartGameButton && (
+              <Button onClick={startGame}>Start Game</Button>
+            )}
+            {isActiveSession && (
+              <Button variant="secondary" onClick={() => leaveSession(session)}>
+                Leave Session
+              </Button>
+            )}
+          </div>
+          <div className="mt-4 flex justify-center items-center">
+            <span className="text-theme-font drop-shadow-white">
+              Game Server:{" "}
+            </span>
             {isConnected ? <ConnectedIndicator /> : <DisconnectedIndicator />}
           </div>
+          <div className="mt-4">
+            <p className="font-bold text-xs text-theme-font drop-shadow-white">
+              This is a tribute to the creator of my favorite game, Skyjo!
+              Please purchase the game to discover the true gaming experience:
+            </p>
+            <a
+              className="text-theme-primary text-sm font-extrabold"
+              href="https://www.magilano.com/produkt/skyjo/"
+            >
+              Buy Skyjo here
+            </a>
+          </div>
+          <CardFanAnimation />
         </div>
       </div>
     </section>
