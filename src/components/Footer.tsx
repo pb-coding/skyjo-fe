@@ -39,12 +39,7 @@ export const Footer: FC<Footer> = ({
   const isEndOfGame = gameData.phase === "game ended";
 
   return (
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to bottom, #4B5563,#1F2937)",
-      }}
-      className="p-4 rounded-lg shadow-lg flex flex-col justify-between text-white"
-    >
+    <div className="p-4 rounded-lg shadow-lg flex flex-col justify-between text-white bg-gradient-to-b from-teal-600 to-teal-700">
       <div className="flex justify-between">
         <div className="flex items-center">
           <Text>Session: {session} </Text>
@@ -61,7 +56,7 @@ export const Footer: FC<Footer> = ({
         </div>
       </div>
       {gameData.players.map((player, index) => (
-        <div key={index} className="mb-3 pt-2 mt-2 border-t border-gray-600">
+        <div key={index} className="mb-3 pt-2 mt-2 border-t border-black">
           <div className="flex justify-between items-center">
             <Text>
               {player?.name} {player.socketId == socket.id && "👤"}{" "}

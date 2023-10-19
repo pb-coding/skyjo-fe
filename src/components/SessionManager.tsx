@@ -50,7 +50,7 @@ export const SessionManager: FC<SessionManagerProps> = ({
   return (
     <section>
       <div className="w-full h-full absolute top-0 left-0 z-0 bg-gradient-to-b from-theme-bg to-teal-500">
-        <div className="font-theme py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
+        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
           <h1 className="drop-shadow-black mb-4 text-7xl font-extrabold tracking-tight leading-none md:text-8xl lg:text-8xl text-white">
             SKYLO
           </h1>

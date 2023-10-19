@@ -6,7 +6,7 @@ type TextNormalProps = HTMLProps<HTMLParagraphElement> & {
 
 const Text: FC<TextNormalProps> = ({ children, ...rest }) => {
   return (
-    <p className="text-sm font-medium text-white" {...rest}>
+    <p className="text-lg font-medium drop-shadow-black text-white" {...rest}>
       {children}
     </p>
   );

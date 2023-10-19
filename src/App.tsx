@@ -64,7 +64,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="bg-gray-900 w-screen h-screen">
+    <div className="bg-teal-900 font-theme w-screen h-screen">
       {!gameData && (
         <SessionManager
           isConnected={isConnected}
