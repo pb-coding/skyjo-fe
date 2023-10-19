@@ -14,14 +14,18 @@ This is the frontend of this web based game using:
 - Socket.io
 
 Players can connect to each other using the same session name:
-![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/dd8f0e64-b673-48b9-84fe-4a3b3e307a4a)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/60044a39-8e8c-4aea-90af-9fb52a5d6e27)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/aae315b3-8b9b-4ae9-b7fd-8193be940e1a)
+
 
 When two players have joined the same session they can start the game:
-![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/e4454487-a03f-4ffb-93ec-e772783ef52c)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/81629246-5259-460c-82b9-7f71a19d4ab5)
+
 
 Game play:
-![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/73111d78-3e7e-4916-9b9d-4db6d8fee317)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/dbdb6655-ea73-4b7b-8b26-9eae8f1c6687)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/228afda3-6525-4674-ba0a-b4d5bbca68cc)
+![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/1c64bfbb-bb03-412b-990e-1e03c55b477f)
 
-![image](https://github.com/pb-coding/skyjo-fe/assets/71174645/717cff3d-0d4b-4fcd-845d-ef52c934090f)
 
 Backend: https://github.com/pb-coding/skyjo-be
