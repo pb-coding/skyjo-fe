@@ -6,6 +6,7 @@ import { Footer } from "./components/Footer";
 import { SessionManager } from "./components/SessionManager";
 import { Game } from "./types/gameTypes";
 import MessageDisplay from "./components/MessageDisplay";
+import TopFixedChips from "./components/TopFixedChips";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -87,6 +88,7 @@ export default function App() {
           setSession={setSession}
         />
       )}
+      <TopFixedChips session={session} />
     </div>
   );
 }

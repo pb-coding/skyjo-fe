@@ -3,7 +3,6 @@ import { socket } from "../socket";
 
 import { ConnectedIndicator, DisconnectedIndicator } from "./Indicators";
 import Button from "../global/Button";
-import VoiceChat from "./VoiceChat";
 
 type SessionManagerProps = {
   isConnected: boolean;
@@ -49,12 +48,7 @@ export const SessionManager: FC<SessionManagerProps> = ({
 
   return (
     <section>
-      <div
-        className="w-full h-full absolute top-0 left-0 z-0"
-        style={{
-          backgroundImage: "linear-gradient(to bottom, #233876, #111827)",
-        }}
-      >
+      <div className="w-full h-full absolute top-0 left-0 z-0 bg-teal-500">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 z-10 relative">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl text-white">
             Skylo
@@ -101,7 +95,6 @@ export const SessionManager: FC<SessionManagerProps> = ({
             <span className="text-gray-200">Game Server: </span>
             {isConnected ? <ConnectedIndicator /> : <DisconnectedIndicator />}
           </div>
-          <VoiceChat session={session} />
         </div>
       </div>
     </section>

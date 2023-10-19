@@ -1,5 +1,7 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { socket } from "../socket";
+
+import HeadsetIcon from "../global/icons/HeadsetIcon";
 
 type VoiceChatProps = {
   session: string;
@@ -17,6 +19,8 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     ],
     iceCandidatePoolSize: 10,
   };
+
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
 
   // const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
@@ -135,13 +139,22 @@ const VoiceChat: FC<VoiceChatProps> = ({ session }) => {
     console.log("Offer created");
   };
 
+  const disableAudio = () => {
+    pc.current.close();
+    console.log("Audio disabled");
+  };
+
+  const toggleAudio = async () => {
+    isAudioEnabled ? disableAudio() : enableAudio();
+    setIsAudioEnabled((previous) => !previous);
+  };
+
   return (
-    <div style={{ zIndex: 100 }}>
+    <div>
       {/*<audio ref={localAudioRef} autoPlay muted></audio>*/}
       <audio ref={remoteAudioRef} autoPlay></audio>
-
-      <button style={{ zIndex: 100 }} onClick={enableAudio}>
-        Enable Voice Chat
+      <button onClick={toggleAudio}>
+        <HeadsetIcon />
       </button>
     </div>
   );
