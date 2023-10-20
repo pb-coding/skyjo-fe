@@ -33,14 +33,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: TapTap21/docker-remote-deployment-action@v1.1
-      name: Docker-Compose Remote Deployment
+    - uses: wshihadeh/docker-deployment-action@v2
+      name: Docker Deployment
       with:
         remote_docker_host: ${{ secrets.DEPLOY_HOST }}
         ssh_private_key: ${{ secrets.DEPLOY_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        copy_stack_file: true
+        deploy_path: ~/deployments/skyjo-fe
         stack_file_name: docker-compose.yml
-        docker_login_password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
-        docker_login_user: ${{ github.actor }}
-        docker_login_registry: ghcr.io
-        args: -p skyjo-fe up -d
+        args: skyjo-fe
