@@ -41,7 +41,7 @@ jobs:
         ssh_private_key: ${{ secrets.DEPLOY_KEY }}
         ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         docker_compose_prefix: skyjo-fe
-        workspace: ~/deployments/voltvector-be
+        workspace: ~/deployments/skyjo-fe
         container_registry: ghcr.io
         container_registry_username: ${{ github.actor }}
         container_registry_password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
