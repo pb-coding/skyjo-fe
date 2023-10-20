@@ -40,6 +40,8 @@ jobs:
         ssh_user: ${{ secrets.DEPLOY_USER }}
         ssh_private_key: ${{ secrets.DEPLOY_KEY }}
         ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        ssh_jump_host: ${{ secrets.DEPLOY_HOST }}
+        ssh_jump_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         docker_compose_prefix: skyjo-fe
         workspace: ~/deployments/skyjo-fe
         container_registry: ghcr.io
