@@ -32,18 +32,16 @@ jobs:
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Deploy to target server
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "$DEPLOY_KEY" > deploy_key.pem
-          chmod 600 deploy_key.pem
-          scp -i deploy_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null .github/scripts/deploy.sh $DEPLOY_USER@$DEPLOY_HOST:/tmp/
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST "GITHUB_TOKEN=$GITHUB_TOKEN bash -s" < /tmp/deploy.sh
-          rm -f deploy_key.pem
+    - uses: actions/checkout@v3
+    - uses: astappiev/docker-compose-remote-action@master
+      name: Docker-Compose Remote Deployment
+      with:
+        ssh_host: ${{ secrets.DEPLOY_HOST }}
+        ssh_user: ${{ secrets.DEPLOY_USER }}
+        ssh_private_key: ${{ secrets.DEPLOY_KEY }}
+        ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        docker_compose_prefix: skyjo-fe
+        workspace: ~/deployments/voltvector-be
+        container_registry: ghcr.io
+        container_registry_username: ${{ github.actor }}
+        container_registry_password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
