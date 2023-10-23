@@ -6,18 +6,16 @@ DOCKER_REGISTRY="ghcr.io"
 DOCKER_USERNAME="pb-coding"
 DOCKER_IMAGE_NAME="skyjo-fe"
 CONTAINER_NAME="skyjo-fe"
-TARGET_DIRECTORY="/home/pb1497/deployments/$CONTAINER_NAME"
 DOCKER_NETWORK="swag_net"
+DOCKER_REGISTRY_TOKEN=$1
 
 # Authenticate with Docker registry
 echo "Authenticating with Docker registry..."
-docker login -u $DOCKER_USERNAME --password $GITHUB_TOKEN $DOCKER_REGISTRY
+docker login -u $DOCKER_USERNAME --password $DOCKER_REGISTRY_TOKEN $DOCKER_REGISTRY
 
 # Pull the latest Docker image
 echo "Pulling the latest Docker image..."
 docker pull $DOCKER_REGISTRY/$DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest
-
-cd $TARGET_DIRECTORY
 
 # Stop and remove the existing container if it exists
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
