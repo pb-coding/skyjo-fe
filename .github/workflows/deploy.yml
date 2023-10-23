@@ -34,10 +34,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: appleboy/ssh-action@v1.0.0
-      name: Execute deploy script on host
+      name: Fetch and run deploy script on remote
       with:
         host: ${{ secrets.DEPLOY_HOST }}
         username: ${{ secrets.DEPLOY_USER }}
         key: ${{ secrets.DEPLOY_KEY }}
         port: 22
-        script: ~/deployments/github-pb-coding-skyjo-fe-deploy.sh ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+        script: |
+          curl -O https://raw.githubusercontent.com/pb-coding/skyjo-fe/main/.github/scripts/deploy.sh
+          chmod +x deploy.sh
+          ./deploy.sh ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+          rm deploy.sh
