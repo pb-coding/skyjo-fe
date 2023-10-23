@@ -33,13 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: wshihadeh/docker-deployment-action@v2
-      name: Docker Deployment
+    - uses: appleboy/ssh-action@v1.0.0
+      name: Execute deploy script on host
       with:
-        remote_docker_host: ${{ secrets.DEPLOY_HOST }}
-        ssh_private_key: ${{ secrets.DEPLOY_KEY }}
-        ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-        copy_stack_file: true
-        deploy_path: ~/deployments/skyjo-fe
-        stack_file_name: docker-compose.yml
-        args: skyjo-fe
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_KEY }}
+        port: 22
+        script: whoami
