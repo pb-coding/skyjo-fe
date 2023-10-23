@@ -40,4 +40,4 @@ jobs:
         username: ${{ secrets.DEPLOY_USER }}
         key: ${{ secrets.DEPLOY_KEY }}
         port: 22
-        script: ~/deployments/github-pb-coding-skyjo-fe-deploy.sh
+        script: ~/deployments/github-pb-coding-skyjo-fe-deploy.sh ${{ secrets.DOCKER_REGISTRY_TOKEN }}
